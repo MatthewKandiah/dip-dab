@@ -12,9 +12,9 @@ int main(int argc, char** argv) {
   unsigned error = lodepng::decode(image, width, height, filename);
   if (error) {
     std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-  } else {
-    std::cout << "image read successfully: width = " << width << ", height = " << height << std::endl;
-  }
+    return 1;
+  } 
+  std::cout << "image read successfully: width = " << width << ", height = " << height << std::endl;
   return 0;
 }
 
