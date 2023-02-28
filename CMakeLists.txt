@@ -4,9 +4,9 @@ project(DIPDAB)
 
 add_subdirectory(src/lodepng)
 
-add_executable(MAIN src/decode_png.cpp)
-target_link_libraries(MAIN PUBLIC lodepng)
-target_include_directories(MAIN PUBLIC 
+add_executable(main src/main.cpp)
+target_link_libraries(main PUBLIC lodepng)
+target_include_directories(main PUBLIC 
   "${PROJECT_SOURCE_DIR}/src/lodepng"
   )
 
