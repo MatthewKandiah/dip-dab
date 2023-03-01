@@ -16,7 +16,6 @@ class Encoder{
     }
 
     void encode(){
-      std::cout << "encode called" << '\n';
       unsigned error = lodepng::encode(filename, image, width, height);
       if (error) {
         std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << '\n';
