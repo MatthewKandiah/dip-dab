@@ -18,9 +18,9 @@ class GreyscaleProcessor {
         if (bufferCount == 3) {
           unsigned char mean = static_cast<char>(buffer[0] + buffer[1] + buffer[2]) / 3;
           unsigned char alpha = static_cast<char>(buffer[3]);
-          result.push_back(mean);
-          result.push_back(mean);
-          result.push_back(mean);
+          for (int i = 0; i < 3; i++) {
+            result.push_back(mean);
+          }
           result.push_back(alpha);
         }
 
