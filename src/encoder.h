@@ -8,12 +8,12 @@ class Encoder{
     std::string filename;
     unsigned width, height;
     std::vector<unsigned char> image;
-    Encoder(std::string w, std::vector<unsigned char> x, unsigned y, unsigned z) {
-      filename = w;
-      image = x;
-      width = y;
-      height = z;
-    }
+    Encoder(std::string w, std::vector<unsigned char> x, unsigned y, unsigned z):
+      filename(w),
+      image(x),
+      width(y),
+      height(z)
+      {}
 
     void encode(){
       unsigned error = lodepng::encode(filename, image, width, height);
