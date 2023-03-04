@@ -4,9 +4,8 @@
 class GreyscaleProcessor {
   public: 
     std::vector<unsigned char> image;
-    GreyscaleProcessor(std::vector<unsigned char> x) {
-      image = x;
-    };
+    GreyscaleProcessor(std::vector<unsigned char> x):
+      image(x) {} 
 
     std::vector<unsigned char> process() {
       std::vector<unsigned char> result {};
