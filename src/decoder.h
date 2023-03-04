@@ -10,8 +10,7 @@ class Decoder {
     std::vector<unsigned char> image;
     unsigned width, height;
 
-    Decoder(std::string x) {
-      input_filepath = x;
+    Decoder(std::string x): input_filepath(x) {
       decode();
     }
 
