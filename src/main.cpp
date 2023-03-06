@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <bitset>
-#include "lodepng.h"
+#include "lodepng/lodepng.h"
 #include "decoder.h"
 #include "encoder.h"
 #include "greyscale_processor.h"
