@@ -1,43 +1,29 @@
+#include <cstdint>
 #include <vector>
 #include <array>
+#include "image.h"
 
 class GreyscaleProcessor {
   public: 
-    std::vector<unsigned char> image;
-    GreyscaleProcessor(std::vector<unsigned char> x):
-      image(x) {} 
+    Image image;
+    GreyscaleProcessor(Image x) : image(x) {} 
 
-    std::vector<unsigned char> process() {
-      std::vector<unsigned char> result {};
-      std::array<unsigned long, 4> buffer;
-      int bufferCount = 0;
-      for (unsigned long number : image) {
-        buffer[bufferCount] = number;
-        flushBuffertoResultIfNecessary(bufferCount, buffer, result);
-        bufferCount++;
-        bufferCount %= 4;
+    std::vector<uint8_t> process() {
+      std::vector<uint8_t> result {};
+      for (Pixel pixel : image.getPixels()) {
+        uint8_t grey = greyscaleWeightedAverage(pixel.getRGBA());
+        uint8_t alpha = pixel.getRGBA()[3];
+        result.push_back(grey);
+        result.push_back(grey);
+        result.push_back(grey);
+        result.push_back(alpha);
       }
       return result;
     }
 
   private:
-    unsigned char greyscaleWeightedAverage(const std::array<unsigned long, 4> &buffer) {
+    unsigned char greyscaleWeightedAverage(const std::array<uint8_t, 4> rgba) {
       // greyscale weighted average formula taken from https://goodcalculators.com/rgb-to-grayscale-conversion-calculator/
-      return static_cast<char>(0.299*buffer[0] + 0.587*buffer[1] + 0.114*buffer[2]);
-    }
-
-    void flushBuffertoResultIfNecessary(
-        int &bufferCount,
-        std::array<unsigned long, 4> &buffer,
-        std::vector<unsigned char> &result
-        ) {
-      if (bufferCount == 3) {
-        unsigned char grey = greyscaleWeightedAverage(buffer);
-        unsigned char alpha = buffer[3];
-        for (int i = 0; i < 3; i++){
-          result.push_back(grey);
-        }
-        result.push_back(alpha);
-      } 
+      return static_cast<char>(0.299*rgba[0] + 0.587*rgba[1] + 0.114*rgba[2]);
     }
  };

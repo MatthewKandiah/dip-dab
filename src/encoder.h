@@ -7,16 +7,15 @@ class Encoder{
   public:
     std::string filename;
     unsigned width, height;
-    std::vector<unsigned char> image;
-    Encoder(std::string w, std::vector<unsigned char> x, unsigned y, unsigned z):
+    std::vector<uint8_t> imageData;
+    Encoder(std::string w, std::vector<uint8_t> x, unsigned y, unsigned z):
       filename(w),
-      image(x),
+      imageData(x),
       width(y),
-      height(z)
-      {}
+      height(z) {}
 
     void encode(){
-      unsigned error = lodepng::encode(filename, image, width, height);
+      unsigned error = lodepng::encode(filename, imageData, width, height);
       if (error) {
         std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << '\n';
       } else {
