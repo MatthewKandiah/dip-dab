@@ -1,3 +1,6 @@
+#ifndef DECODER_H
+#define DECODER_H
+
 #include "lodepng/lodepng.h"
 #include "image.h"
 #include <cstdint>
@@ -29,3 +32,4 @@ class Decoder {
     }
 };
 
+#endif

@@ -1,3 +1,6 @@
+#ifndef IMAGE_H
+#define IMAGE_H
+
 #include <vector>
 #include <array>
 #include <stdint.h>
@@ -30,4 +33,7 @@ class Image{
       }
       return result;
     }
+
 };
+
+#endif

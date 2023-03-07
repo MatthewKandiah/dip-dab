@@ -1,3 +1,6 @@
+#ifndef PIXEL_H
+#define PIXEL_H
+
 #include <array>
 #include <cstdint>
 #include <stdint.h>
@@ -22,3 +25,5 @@ class Pixel {
       return {r, g, b, a};
     }
 };
+
+#endif

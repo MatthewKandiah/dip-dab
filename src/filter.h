@@ -1,3 +1,6 @@
+#ifndef FILTER_H
+#define FILTER_H
+
 #include <vector>
 #include <array>
 
@@ -11,3 +14,5 @@ class Filter {
 
   // TODO public function to apply filter to a passed in pixel neighborhood, returning new pixel value
 };
+
+#endif

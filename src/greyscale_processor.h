@@ -1,3 +1,6 @@
+#ifndef GREYSCALE_PROCESSOR_H
+#define GREYSCALE_PROCESSOR_H
+
 #include <cstdint>
 #include <vector>
 #include <array>
@@ -27,3 +30,5 @@ class GreyscaleProcessor {
       return static_cast<char>(0.299*rgba[0] + 0.587*rgba[1] + 0.114*rgba[2]);
     }
  };
+
+#endif

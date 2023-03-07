@@ -1,3 +1,6 @@
+#ifndef ENCODER_H
+#define ENCODER_H
+
 #include "lodepng/lodepng.h"
 #include <vector>
 #include <string>
@@ -23,3 +26,5 @@ class Encoder{
       }
     }
 };
+
+#endif
