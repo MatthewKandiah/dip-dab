@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
   Decoder decoder = Decoder(filename);
   std::cout << "image read successfully: width = " << decoder.width << ", height = " << decoder.height << '\n';
 
-  GreyscaleProcessor greyscaleProcessor = GreyscaleProcessor(decoder.image);
+  GreyscaleProcessor greyscaleProcessor = GreyscaleProcessor(decoder.getImage());
   const std::vector<unsigned char> greyscaleImage = greyscaleProcessor.process();
   std::cout << "greyscale image produced in memory" << '\n';
   
