@@ -24,6 +24,12 @@ class Image{
       return Pixel(source[rValueIndex], source[gValueIndex], source[bValueIndex], source[aValueIndex]);
     }
 
+    Pixel getGreyscalePixel(int32_t x, int32_t y) {
+      auto pixel = getPixel(x, y);
+      const int32_t grey = 0.299*pixel.r + 0.587*pixel.g + 0.114*pixel.b;  
+      return Pixel(grey, grey, grey, pixel.a);
+    }
+
     std::vector<Pixel> getPixels() {
       std::vector<Pixel> result {};
       for (int i = 0; i < height; i++) {
@@ -34,6 +40,15 @@ class Image{
       return result;
     }
 
+    std::vector<Pixel> getGreyscalePixels() {
+      std::vector<Pixel> result {};
+      for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+          result.push_back(getGreyscalePixel(j,i));
+        }
+      }
+      return result;
+    }
 };
 
 #endif
