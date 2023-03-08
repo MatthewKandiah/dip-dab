@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <stdint.h>
+#include <cassert>
 #include "pixel.h"
 
 class Image{
@@ -14,7 +15,10 @@ class Image{
     Image(int32_t h, int32_t w, std::vector<uint8_t> s):
       height(h),
       width(w),
-      source(s) {}
+      source(s) {
+        // height and width are in terms of pixels, which each have 4 ints
+        assert(4 * height * width == source.size());
+      }
 
     Pixel getPixel(int32_t x, int32_t y) {
       const int32_t rValueIndex = 4 * (width * y + x);
