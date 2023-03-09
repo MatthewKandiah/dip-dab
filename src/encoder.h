@@ -1,30 +1,30 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
+#include "image.h"
 #include "lodepng/lodepng.h"
-#include <vector>
-#include <string>
+#include <cstdint>
 #include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
-class Encoder{
-  public:
-    std::string filename;
-    unsigned width, height;
-    std::vector<uint8_t> imageData;
-    Encoder(std::string w, std::vector<uint8_t> x, unsigned y, unsigned z):
-      filename(w),
-      imageData(x),
-      width(y),
-      height(z) {}
+class Encoder {
+public:
+  std::string filename;
+  Image *image;
+  Encoder(std::string w, Image *x) : filename(w), image(x) {}
 
-    void encode(){
-      unsigned error = lodepng::encode(filename, imageData, width, height);
-      if (error) {
-        std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << '\n';
-      } else {
-        std::cout << "png image successfully written to " <<  filename << '\n';
-      }
+  void encode() {
+    std::uint32_t error = lodepng::encode(filename, image->imageData,
+                                          image->width, image->height);
+    if (error) {
+      std::cout << "encoder error " << error << ": "
+                << lodepng_error_text(error) << '\n';
+    } else {
+      std::cout << "png image successfully written to " << filename << '\n';
     }
+  }
 };
 
 #endif
