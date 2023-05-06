@@ -4,18 +4,18 @@
 #include <string>
 #include <vector>
 
-
-void decodeOneStep(const char *filename, std::vector<unsigned char> &image, unsigned &width, unsigned &height) {
-  unsigned error = lodepng::decode(image, width, height, filename);
+void decodeOneStep(const std::string &filename, std::vector<std::uint8_t> &image,
+                   std::uint32_t &width, std::uint32_t &height) {
+  std::uint32_t error = lodepng::decode(image, width, height, filename);
 
   if (error)
     std::cout << "decoder error " << error << ": " << lodepng_error_text(error)
               << '\n';
 }
 
-void encodeOneStep(const char *filename, std::vector<unsigned char> &image,
-                   unsigned &width, unsigned &height) {
-  unsigned error = lodepng::encode(filename, image, width, height);
+void encodeOneStep(const std::string &filename, std::vector<std::uint8_t> &image,
+                   std::uint32_t &width, std::uint32_t &height) {
+  std::uint32_t error = lodepng::encode(filename, image, width, height);
 
   if (error)
     std::cout << "encoder error" << error << ": " << lodepng_error_text(error)
