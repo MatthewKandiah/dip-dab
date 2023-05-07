@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-void encodePng(const std::string &filename, std::vector<std::uint8_t> &image,
+void ImageEncoder::encodePng(const std::string &filename, std::vector<std::uint8_t> &image,
                std::uint32_t &width, std::uint32_t &height) {
   std::uint32_t error = lodepng::encode(filename.c_str(), image, width, height);
 
