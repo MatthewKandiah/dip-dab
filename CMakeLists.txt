@@ -7,7 +7,7 @@ add_subdirectory(src/lodepng)
 add_executable(main src/main.cpp)
 target_link_libraries(main PUBLIC lodepng)
 target_include_directories(main PUBLIC 
-  "${PROJECT_SOURCE_DIR}/scr"
+  "${PROJECT_SOURCE_DIR}/src"
   "${PROJECT_SOURCE_DIR}/src/lodepng"
   )
 
