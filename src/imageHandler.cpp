@@ -21,17 +21,40 @@ void ImageHandler::encodePng(const std::string &filename) {
 }
 
 void ImageHandler::convertToMonochrome() {
-    std::vector<std::uint8_t> imageCopy;
-    for (auto i = 0; i < image.size(); i+= 4) {
+    std::vector<std::uint8_t> resultImage;
+    for (auto i = 0; i < image.size(); i += 4) {
         const std::uint8_t r = image[i];
         const std::uint8_t g = image[i+1];
         const std::uint8_t b = image[i+2];
         const std::uint8_t alpha = image[i+3];
         const auto grey = static_cast<std::uint8_t>(0.299 * r + 0.587 * g + 0.114 * b);
-        imageCopy.push_back(grey);
-        imageCopy.push_back(grey);
-        imageCopy.push_back(grey);
-        imageCopy.push_back(alpha);
+        resultImage.push_back(grey);
+        resultImage.push_back(grey);
+        resultImage.push_back(grey);
+        resultImage.push_back(alpha);
     }
-    image = imageCopy;
+    image = resultImage;
 }
+
+void ImageHandler::invertImage() {
+    std::vector<std::uint8_t> resultImage;
+    for (auto i = 0; i < image.size(); i += 4) {
+        const std::uint8_t r = image[i];
+        const std::uint8_t g = image[i+1];
+        const std::uint8_t b = image[i+2];
+        const std::uint8_t alpha = image[i+3];
+        resultImage.push_back(255 - r);
+        resultImage.push_back(255 - g);
+        resultImage.push_back(255 - b);
+        resultImage.push_back(alpha);
+    }
+    image = resultImage;
+}
+
+// make opaque
+
+// mean blur
+
+// gaussian blur
+
+// edge detection
