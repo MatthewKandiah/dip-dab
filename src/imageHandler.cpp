@@ -16,7 +16,7 @@ void ImageHandler::decodePng(const std::string &filename) {
 }
 
 void ImageHandler::encodePng(const std::string &filename) {
-    std::uint32_t error = lodepng::encode(filename, image.toFlattenedVector(), image.width(), image.height());
+    std::uint32_t error = lodepng::encode(filename, image.toFlattenedVector(), image.width, image.height);
 
     if (error) {
         std::cout << "encoder error " << error << ": " << lodepng_error_text(error)
@@ -35,7 +35,7 @@ void ImageHandler::convertToMonochrome() {
             resultImageData.push_back(pixel.a);
         }
     }
-    image = Image(resultImageData, image.width(), image.height());
+    image = Image(resultImageData, image.width, image.height);
 }
 
 void ImageHandler::invertImage() {
@@ -48,7 +48,7 @@ void ImageHandler::invertImage() {
             resultImageData.push_back(pixel.a);
         }
     }
-    image = Image(resultImageData, image.width(), image.height());
+    image = Image(resultImageData, image.width, image.height);
 }
 
 void ImageHandler::makeOpaque() {
@@ -61,7 +61,7 @@ void ImageHandler::makeOpaque() {
             resultImageData.push_back(255);
         }
     }
-    image = Image(resultImageData, image.width(), image.height());
+    image = Image(resultImageData, image.width, image.height);
 }
 
 // mean blur

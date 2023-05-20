@@ -10,6 +10,8 @@ public:
     Image() {};
 
     Image(std::vector<std::uint8_t> imageData, std::uint32_t width, std::uint32_t height) {
+        this->width = width;
+        this->height = height;
         std::vector<Pixel> row;
         for (auto i = 0; i < height; i++) {
             for (auto j = 0; j < width; j++) {
@@ -27,6 +29,8 @@ public:
 
     std::vector<std::vector<Pixel> > data;
 
+    std::uint32_t width, height;
+
     std::vector<std::uint8_t> toFlattenedVector() {
         std::vector<std::uint8_t> result;
         for (auto row : data) {
@@ -38,14 +42,6 @@ public:
             }
         }
         return result;
-    }
-
-    std::uint32_t width() {
-        return data[0].size();
-    }
-
-    std::uint32_t height() {
-        return data.size();
     }
 };
 
