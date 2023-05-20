@@ -1,3 +1,5 @@
 **.o
 build/**
 notes/**
+cmake-build-debug/
+.idea/
