@@ -1,3 +1,5 @@
 target_sources(main PUBLIC
-  "imageHandler.cpp"
+        "imageHandler.cpp"
+        "pixel.hpp"
+        "image.hpp"
   )

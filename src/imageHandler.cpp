@@ -3,16 +3,20 @@
 #include <iostream>
 
 void ImageHandler::decodePng(const std::string &filename) {
-    std::uint32_t error = lodepng::decode(image, width, height, filename);
+    std::vector<std::uint8_t> imageData;
+    std::uint32_t width, height;
+    std::uint32_t error = lodepng::decode(imageData, width, height, filename);
 
     if (error) {
         std::cout << "decoder error " << error << ": " << lodepng_error_text(error)
                   << '\n';
+    } else {
+        image = Image(imageData, width, height);
     }
 }
 
 void ImageHandler::encodePng(const std::string &filename) {
-    std::uint32_t error = lodepng::encode(filename, image, width, height);
+    std::uint32_t error = lodepng::encode(filename, image.toFlattenedVector(), image.width(), image.height());
 
     if (error) {
         std::cout << "encoder error " << error << ": " << lodepng_error_text(error)
@@ -21,45 +25,43 @@ void ImageHandler::encodePng(const std::string &filename) {
 }
 
 void ImageHandler::convertToMonochrome() {
-    std::vector<std::uint8_t> resultImage;
-    for (auto i = 0; i < image.size(); i += 4) {
-        const std::uint8_t r = image[i];
-        const std::uint8_t g = image[i+1];
-        const std::uint8_t b = image[i+2];
-        const std::uint8_t alpha = image[i+3];
-        const auto grey = static_cast<std::uint8_t>(0.299 * r + 0.587 * g + 0.114 * b);
-        resultImage.push_back(grey);
-        resultImage.push_back(grey);
-        resultImage.push_back(grey);
-        resultImage.push_back(alpha);
+    std::vector<std::uint8_t> resultImageData;
+    for (auto row: image.data) {
+        for (auto pixel: row) {
+            const auto grey = static_cast<std::uint8_t>(0.299 * pixel.r + 0.587 * pixel.g + 0.114 * pixel.b);
+            resultImageData.push_back(grey);
+            resultImageData.push_back(grey);
+            resultImageData.push_back(grey);
+            resultImageData.push_back(pixel.a);
+        }
     }
-    image = resultImage;
+    image = Image(resultImageData, image.width(), image.height());
 }
 
 void ImageHandler::invertImage() {
-    std::vector<std::uint8_t> resultImage;
-    for (auto i = 0; i < image.size(); i += 4) {
-        const std::uint8_t r = image[i];
-        const std::uint8_t g = image[i+1];
-        const std::uint8_t b = image[i+2];
-        const std::uint8_t alpha = image[i+3];
-        resultImage.push_back(255 - r);
-        resultImage.push_back(255 - g);
-        resultImage.push_back(255 - b);
-        resultImage.push_back(alpha);
+    std::vector<std::uint8_t> resultImageData;
+    for (auto row : image.data) {
+        for (auto pixel : row) {
+            resultImageData.push_back(255 - pixel.r);
+            resultImageData.push_back(255 - pixel.g);
+            resultImageData.push_back(255 - pixel.b);
+            resultImageData.push_back(pixel.a);
+        }
     }
-    image = resultImage;
+    image = Image(resultImageData, image.width(), image.height());
 }
 
 void ImageHandler::makeOpaque() {
-    std::vector<std::uint8_t> resultImage;
-    for (auto i = 0; i < image.size(); i += 4) {
-        resultImage.push_back(image[i]);
-        resultImage.push_back(image[i + 1]);
-        resultImage.push_back(image[i + 2]);
-        resultImage.push_back(255);
+    std::vector<std::uint8_t> resultImageData;
+    for (auto row : image.data) {
+        for (auto pixel : row) {
+            resultImageData.push_back(pixel.r);
+            resultImageData.push_back(pixel.g);
+            resultImageData.push_back(pixel.b);
+            resultImageData.push_back(255);
+        }
     }
-    image = resultImage;
+    image = Image(resultImageData, image.width(), image.height());
 }
 
 // mean blur
