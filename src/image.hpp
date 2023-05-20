@@ -7,6 +7,8 @@
 
 class Image {
 public:
+    Image() : width(), height() {};
+
     Image(std::vector<std::uint8_t> imageData, std::uint32_t width, std::uint32_t height) {
         this->width = width;
         this->height = height;
