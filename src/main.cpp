@@ -2,7 +2,6 @@
 #include "imageEncoder.hpp"
 #include "lodepng/lodepng.h"
 #include <cstdint>
-#include <iostream>
 #include <string>
 #include <vector>
 
