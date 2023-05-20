@@ -1,5 +1,4 @@
-#include "imageDecoder.hpp"
-#include "imageEncoder.hpp"
+#include "imageHandler.hpp"
 #include "lodepng/lodepng.h"
 #include <cstdint>
 #include <string>
@@ -12,8 +11,8 @@ int main() {
   std::vector<std::uint8_t> image;
   std::uint32_t width, height;
 
-  ImageDecoder().decodePng(filename, image, width, height);
-  ImageEncoder().encodePng(outputFilename, image, width, height);
+  ImageHandler().decodePng(filename, image, width, height);
+  ImageHandler().encodePng(outputFilename, image, width, height);
 
   return 0;
 }
