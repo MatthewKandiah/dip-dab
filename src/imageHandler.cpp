@@ -16,7 +16,7 @@ void ImageHandler::decodePng(const std::string &filename) {
 }
 
 void ImageHandler::encodePng(const std::string &filename) {
-    std::uint32_t error = lodepng::encode(filename, image.toFlattenedVector(), image.width, image.height);
+    std::uint32_t error = lodepng::encode(filename, image.toFlatVector(), image.width, image.height);
 
     if (error) {
         std::cout << "encoder error " << error << ": " << lodepng_error_text(error)

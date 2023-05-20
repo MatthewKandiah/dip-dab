@@ -7,8 +7,6 @@
 
 class Image {
 public:
-    Image() {};
-
     Image(std::vector<std::uint8_t> imageData, std::uint32_t width, std::uint32_t height) {
         this->width = width;
         this->height = height;
@@ -31,7 +29,7 @@ public:
 
     std::uint32_t width, height;
 
-    std::vector<std::uint8_t> toFlattenedVector() {
+    std::vector<std::uint8_t> toFlatVector() {
         std::vector<std::uint8_t> result;
         for (auto row : data) {
             for (auto pixel : row) {
