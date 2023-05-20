@@ -7,11 +7,12 @@
 
 class ImageHandler {
 public:
-  void decodePng(const std::string &filename, std::vector<std::uint8_t> &image,
-                 std::uint32_t &width, std::uint32_t &height);
+  std::uint32_t width;
+  std::uint32_t height;
+  std::vector<std::uint8_t> image;
+  void decodePng(const std::string &filename);
 
-  void encodePng(const std::string &filename, std::vector<std::uint8_t> &image,
-                 std::uint32_t &width, std::uint32_t &height);
+  void encodePng(const std::string &filename);
 };
 
 #endif // IMAGE_HANDLER_HPP
