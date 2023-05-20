@@ -25,6 +25,8 @@ public:
 
     void invertImage();
 
+    void makeOpaque();
+
 private:
     std::vector<std::uint8_t> image;
     std::uint32_t width = 0;

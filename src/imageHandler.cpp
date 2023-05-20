@@ -51,7 +51,16 @@ void ImageHandler::invertImage() {
     image = resultImage;
 }
 
-// make opaque
+void ImageHandler::makeOpaque() {
+    std::vector<std::uint8_t> resultImage;
+    for (auto i = 0; i < image.size(); i += 4) {
+        resultImage.push_back(image[i]);
+        resultImage.push_back(image[i + 1]);
+        resultImage.push_back(image[i + 2]);
+        resultImage.push_back(255);
+    }
+    image = resultImage;
+}
 
 // mean blur
 
