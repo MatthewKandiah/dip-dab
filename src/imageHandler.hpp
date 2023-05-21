@@ -21,6 +21,8 @@ public:
 
     void makeOpaque();
 
+    void doMeanBlur();
+
 private:
     Image image;
 };

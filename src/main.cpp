@@ -7,6 +7,7 @@ int main() {
     const std::string opaqueOutputFilename = "examples/sunset.opaque.png";
     const std::string monochromeOutputFilename = "examples/sunset.monochrome.png";
     const std::string invertedOutputFilename = "examples/sunset.inverted.png";
+    const std::string meanBlurredOutputFilename = "examples/sunset.mean_blurred.png";
 
     ImageHandler imageHandler = ImageHandler(filename);
     imageHandler.encodePng(outputFilename);
@@ -16,6 +17,9 @@ int main() {
     imageHandler.encodePng(monochromeOutputFilename);
     imageHandler.invertImage();
     imageHandler.encodePng(invertedOutputFilename);
+    imageHandler.invertImage();
+    imageHandler.doMeanBlur();
+    imageHandler.encodePng(meanBlurredOutputFilename);
 
     return 0;
 }
