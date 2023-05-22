@@ -24,6 +24,7 @@ int main() {
   invertedImageHandler.encodePng(invertedOutputFilename);
 
   ImageHandler meanBlurredImageHandler = imageHandler;
+  meanBlurredImageHandler.convertToMonochrome();
   meanBlurredImageHandler.doMeanBlur();
   meanBlurredImageHandler.encodePng(meanBlurredOutputFilename);
 
