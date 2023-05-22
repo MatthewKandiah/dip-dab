@@ -5,6 +5,8 @@
 
 class Pixel {
 public:
+    Pixel() {}
+
     Pixel(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha) {
         r = red;
         g = green;

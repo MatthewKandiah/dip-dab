@@ -1,6 +1,89 @@
 #include "imageHandler.hpp"
 #include "lodepng/lodepng.h"
 #include <iostream>
+#include <utility>
+
+// TODO - move to its own sensible file
+class Kernel {
+public:
+    Kernel(std::vector<std::vector<std::int32_t> > newData) {
+        data = std::move(newData);
+    }
+
+    std::vector<std::vector<std::int32_t> > data;
+
+    std::size_t width() { return data[0].size(); } // must be odd to be sensibly centred on pixel
+
+    std::size_t height() { return data.size(); } // must be odd to be sensibly centred on pixel
+
+    std::int32_t rightBoundary() {
+        return static_cast<std::int32_t>(0.5 * static_cast<double>(width() - 1));
+    }
+
+    std::int32_t upperBoundary() {
+        return static_cast<std::int32_t>(0.5 * static_cast<double>(height() - 1));
+    }
+
+    std::int32_t leftBoundary() {
+        return -rightBoundary();
+    }
+
+    std::int32_t lowBoundary() {
+        return -upperBoundary();
+    }
+
+    std::int32_t getNormalisationFactor() {
+        auto result = 0;
+        for (auto row: data) {
+            for (auto value: row) {
+                result += value;
+            }
+        }
+        return result;
+    }
+
+    Image apply(const Image &image) {
+        std::vector<Pixel> resultPixelData;
+        for (auto rowIndex = 0; rowIndex < image.data.size(); rowIndex++) {
+            for (auto columnIndex = 0; columnIndex < image.data[0].size(); columnIndex++) {
+                resultPixelData.push_back(applyToPixel(image, columnIndex, rowIndex));
+            }
+        }
+        return Image(resultPixelData, image.width);
+    }
+
+private:
+    Pixel applyToPixel(const Image &image, std::size_t columnIndex, std::size_t rowIndex) {
+        std::int32_t resultR = 0, resultG = 0, resultB = 0, resultA = 0;
+
+        for (auto kernelColumnPosition = leftBoundary();
+             kernelColumnPosition <= rightBoundary(); kernelColumnPosition++) {
+            for (auto kernelRowPosition = lowBoundary(); kernelRowPosition <= upperBoundary(); kernelRowPosition++) {
+                const auto kernelValue = data[kernelRowPosition][kernelColumnPosition];
+                auto imageColumnPosition = static_cast<std::int32_t>(columnIndex + kernelColumnPosition);
+                auto imageRowPosition = static_cast<std::int32_t>(rowIndex + kernelRowPosition);
+                Pixel currentPixel;
+                if (imageColumnPosition < 0 || imageColumnPosition >= image.width || imageRowPosition < 0 ||
+                    imageRowPosition >= image.height) {
+                    // effectively adds an infinite, transparent, black border around the image to handle the edges
+                    currentPixel = Pixel(0, 0, 0, 0);
+                } else {
+                    currentPixel = image.data[imageRowPosition][imageColumnPosition];
+                }
+                resultR += kernelValue * currentPixel.r;
+                resultG += kernelValue * currentPixel.g;
+                resultB += kernelValue * currentPixel.b;
+                resultA += kernelValue * currentPixel.a;
+            }
+        }
+        const auto normalisationFactor = getNormalisationFactor();
+        resultR /= normalisationFactor;
+        resultG /= normalisationFactor;
+        resultB /= normalisationFactor;
+        resultA /= normalisationFactor;
+        return Pixel(resultR, resultG, resultB, resultA);
+    }
+};
 
 void ImageHandler::decodePng(const std::string &filename) {
     std::vector<std::uint8_t> imageData;
@@ -65,56 +148,11 @@ void ImageHandler::makeOpaque() {
 }
 
 void ImageHandler::doMeanBlur() {
-    std::vector<std::uint8_t> resultImageData;
-    const std::int32_t kernelLeftBoundIndex = -2;
-    const std::int32_t kernelRightBoundIndex = 2;
-    const std::int32_t kernelUpperBoundIndex = 2;
-    const std::int32_t kernelBottomBoundIndex = -2;
-    for (auto rowIndex = 0; rowIndex < image.height; rowIndex++) {
-        for (auto columnIndex = 0; columnIndex < image.width; columnIndex++) {
-            std::vector<Pixel> kernelData;
-            for (auto rowIndexDisplacement = kernelLeftBoundIndex;
-                 rowIndexDisplacement <= kernelRightBoundIndex; rowIndexDisplacement++) {
-                for (auto columnIndexDisplacement = kernelBottomBoundIndex;
-                     columnIndexDisplacement <= kernelUpperBoundIndex; columnIndexDisplacement++) {
-                    auto currentRowIndex = rowIndex + rowIndexDisplacement;
-                    auto currentColumnIndex = columnIndex + columnIndexDisplacement;
-                    if (currentRowIndex < 0 || currentRowIndex >= image.height || currentColumnIndex < 0 ||
-                        currentColumnIndex >= image.width) {
-                        // this is like adding an infinite transparent black border around the image
-                        // there are probably smarter ways to handle kernels overflowing the edge of the image!
-                        kernelData.push_back(Pixel(0, 0, 0, 0));
-                    } else {
-                        kernelData.push_back(image.data[currentRowIndex][currentColumnIndex]);
-                    }
-                }
-            }
-            auto kernel = Image(kernelData, kernelRightBoundIndex - kernelLeftBoundIndex + 1);
-            auto resultR = 0;
-            auto resultG = 0;
-            auto resultB = 0;
-            auto resultA = 0;
-            auto kernelPixelCount = 0;
-            for (auto kernelRow: kernel.data) {
-                for (auto kernelPixel: kernelRow) {
-                    resultR += kernelPixel.r;
-                    resultG += kernelPixel.g;
-                    resultB += kernelPixel.b;
-                    resultA += kernelPixel.a;
-                    kernelPixelCount++;
-                }
-            }
-            resultR /= kernelPixelCount;
-            resultG /= kernelPixelCount;
-            resultB /= kernelPixelCount;
-            resultA /= kernelPixelCount;
-            resultImageData.push_back(resultR);
-            resultImageData.push_back(resultG);
-            resultImageData.push_back(resultB);
-            resultImageData.push_back(resultA);
-        }
-    }
-    image = Image(resultImageData, image.width, image.height);
+    std::vector<int32_t> row = {1,1,1,1,1};
+    std::vector<std::vector<int32_t> > kernelData = {row, row, row, row, row};
+
+    auto kernel = Kernel(kernelData);
+    image = kernel.apply(image);
 }
 
 // gaussian blur
