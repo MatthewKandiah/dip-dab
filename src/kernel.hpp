@@ -36,7 +36,7 @@ public:
         auto result = 0;
         for (const auto &row: data) {
             for (const auto &value: row) {
-                result += value;
+                result += abs(value);
             }
         }
         return result;
