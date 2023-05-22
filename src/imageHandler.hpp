@@ -1,30 +1,30 @@
 #ifndef IMAGE_HANDLER_HPP
 #define IMAGE_HANDLER_HPP
 
+#include "image.hpp"
 #include <cstdint>
 #include <string>
 #include <utility>
 #include <vector>
-#include "image.hpp"
 
 class ImageHandler {
 public:
-    ImageHandler(const std::string &filename) { decodePng(filename); }
+  ImageHandler(const std::string &filename) { decodePng(filename); }
 
-    void decodePng(const std::string &filename);
+  void decodePng(const std::string &filename);
 
-    void encodePng(const std::string &filename);
+  void encodePng(const std::string &filename);
 
-    void convertToMonochrome();
+  void convertToMonochrome();
 
-    void invertImage();
+  void invertImage();
 
-    void makeOpaque();
+  void makeOpaque();
 
-    void doMeanBlur();
+  void doMeanBlur();
 
 private:
-    Image image;
+  Image image;
 };
 
 #endif // IMAGE_HANDLER_HPP
