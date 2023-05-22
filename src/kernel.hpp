@@ -65,8 +65,8 @@ private:
                 Pixel currentPixel;
                 if (imageColumnPosition < 0 || imageColumnPosition >= image.width || imageRowPosition < 0 ||
                     imageRowPosition >= image.height) {
-                    // effectively adds an infinite, transparent, black border around the image to handle the edges
-                    currentPixel = Pixel(0, 0, 0, 0);
+                    // effectively adds an infinite, opaque, black border around the image to handle the edges
+                    currentPixel = Pixel(0, 0, 0, 255);
                 } else {
                     currentPixel = image.data[imageRowPosition][imageColumnPosition];
                 }
