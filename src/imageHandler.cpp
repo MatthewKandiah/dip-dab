@@ -74,5 +74,9 @@ void ImageHandler::doMeanBlur() {
 }
 
 // gaussian blur
+// given a standard deviation, and a set peak of 1, calculate the kernel size to get edge value < 0.01, then generate kernel, then apply
 
 // edge detection
+// need to do the left-right edge detection, then the up-down edge detection, then add them in quadrature
+// NOTE - new complexity here, this transformation requires calculating multiple kernels for each pixel, can either generate 2 images then combine
+//        but probably better to calculate both values in the loop over pixels, and generate a single image
