@@ -25,6 +25,10 @@ void ImageHandler::encodePng(const std::string &filename) {
     }
 }
 
+void ImageHandler::clear() {
+    image = Image();
+}
+
 void ImageHandler::convertToMonochrome() {
     std::vector<std::uint8_t> resultImageData;
     for (const auto &row: image.data) {

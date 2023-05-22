@@ -15,6 +15,8 @@ public:
 
   void encodePng(const std::string &filename);
 
+  void clear();
+
   void convertToMonochrome();
 
   void invertImage();
