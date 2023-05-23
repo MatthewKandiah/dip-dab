@@ -2,15 +2,16 @@
 #define KERNEL_HPP
 
 #include "image.hpp"
+#include <iostream>
 #include <vector>
 
 class Kernel {
 public:
-    Kernel(std::vector<std::vector<std::int32_t> > newData) {
+    Kernel(std::vector<std::vector<double> > newData) {
         data = std::move(newData);
     }
 
-    std::vector<std::vector<std::int32_t> > data;
+    std::vector<std::vector<double> > data;
 
     std::size_t width() { return data[0].size(); } // must be odd to be sensibly centred on pixel
 
@@ -46,6 +47,7 @@ public:
         std::vector<Pixel> resultPixelData;
         for (auto rowIndex = 0; rowIndex < image.data.size(); rowIndex++) {
             for (auto columnIndex = 0; columnIndex < image.data[0].size(); columnIndex++) {
+                std::cout << "Kernel.apply - rowIndex " << rowIndex << " columnIndex " << columnIndex << '\n';
                 resultPixelData.push_back(applyToPixel(image, columnIndex, rowIndex));
             }
         }

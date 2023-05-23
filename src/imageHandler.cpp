@@ -2,6 +2,7 @@
 #include "lodepng/lodepng.h"
 #include "kernel.hpp"
 #include <iostream>
+#include <math.h>
 
 void ImageHandler::decodePng(const std::string &filename) {
     std::vector<std::uint8_t> imageData;
@@ -70,15 +71,44 @@ void ImageHandler::makeOpaque() {
 }
 
 void ImageHandler::doMeanBlur() {
-    std::vector<int32_t> row = {1, 1, 1, 1, 1};
-    std::vector<std::vector<int32_t> > kernelData = {row, row, row, row, row};
+    std::vector<double> row = {1, 1, 1, 1, 1};
+    std::vector<std::vector<double> > kernelData = {row, row, row, row, row};
 
     auto kernel = Kernel(kernelData);
     image = kernel.apply(image);
 }
 
-// gaussian blur
-// given a standard deviation, and a set peak of 1, calculate the kernel size to get edge value < 0.01, then generate kernel, then apply
+double gaussian(double x, double sigma) {
+    return std::exp(-(x * x) / (sigma * sigma));
+}
+
+void ImageHandler::doGaussianBlur(double sigma) {
+// reasonable upper bound on the dimensions of the N x N kernel is N <= 3sigma
+//    auto gaussian = [sigma](double x) { return std::exp(-(x * x) / (sigma * sigma)); };
+    std::int32_t kernelDimension = 0;
+    auto result = gaussian(kernelDimension, sigma);
+    while (result >= 0.01) {
+        kernelDimension++;
+        result = gaussian(kernelDimension, sigma);
+//        std::cout << result << ' ' << kernelDimension << '\n';
+    }
+
+    std::vector<std::vector<double>> kernelData;
+    for (auto rowIndex = 0; rowIndex < kernelDimension; rowIndex++) {
+        std::vector<double> row{};
+        for (auto columnIndex = 0; columnIndex < kernelDimension; columnIndex++) {
+            double distance = std::sqrt(rowIndex * rowIndex + columnIndex * columnIndex);
+//            std::cout << "rowIndex " << rowIndex << " columnIndex " << columnIndex << " distance " << distance << '\n';
+            row.push_back(gaussian(distance, sigma));
+        }
+        kernelData.push_back(row);
+        row.clear();
+    }
+    auto kernel = Kernel(kernelData);
+//    std::cout << "kernel built\n";
+    image = kernel.apply(image);
+    std::cout << "image updated\n";
+}
 
 // edge detection
 // need to do the left-right edge detection, then the up-down edge detection, then add them in quadrature

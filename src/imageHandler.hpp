@@ -25,6 +25,8 @@ public:
 
   void doMeanBlur();
 
+  void doGaussianBlur(double sigma);
+
 private:
   Image image;
 };

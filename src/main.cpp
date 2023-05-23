@@ -8,7 +8,8 @@ int main() {
   const std::string monochromeOutputFilename = "examples/sunset.monochrome.png";
   const std::string invertedOutputFilename = "examples/sunset.inverted.png";
   const std::string invertedMonochromeOutputFilename = "examples/sunset.monochrome.inverted.png";
-  const std::string meanBlurredOutputFilename ="examples/sunset.mean_blurred.png";
+  const std::string meanBlurredOutputFilename = "examples/sunset.mean_blurred.png";
+  const std::string gaussianBlurred2OutputFilename = "examples/sunset.gaussian_blurred2.png";
 
   ImageHandler imageHandler = ImageHandler(filename);
   imageHandler.encodePng(outputFilename);
@@ -39,6 +40,12 @@ int main() {
   meanBlurredImageHandler.doMeanBlur();
   meanBlurredImageHandler.encodePng(meanBlurredOutputFilename);
   meanBlurredImageHandler.clear();
+
+  ImageHandler gaussianBlurredImageHandler2 = imageHandler;
+//  gaussianBlurredImageHandler2.convertToMonochrome();
+  gaussianBlurredImageHandler2.doGaussianBlur(2);
+  gaussianBlurredImageHandler2.encodePng(gaussianBlurred2OutputFilename);
+  gaussianBlurredImageHandler2.clear();
 
   return 0;
 }
