@@ -65,7 +65,7 @@ public:
 
     std::vector<std::uint8_t> toFlatVector() {
         std::vector<std::uint8_t> result;
-        for (auto row: data) {
+        for (const auto& row: data) {
             for (auto pixel: row) {
                 result.push_back(pixel.r);
                 result.push_back(pixel.g);
